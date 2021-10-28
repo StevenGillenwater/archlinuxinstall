@@ -1,37 +1,169 @@
-## Welcome to GitHub Pages
+<h1 align="center">Arch Linux Installation Documentation</h1>
 
-You can use the [editor on GitHub](https://github.com/StevenGillenwater/archlinuxinstall/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+### Linux Pre-Installation
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+1. **Download an HTTP link from https://archlinux.org/download/**</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: if the iso has split into two files, it has not downloaded correctly. The MD5/SHA1 will not match.*</br>
 
-### Markdown
+2. **To verify the signature:**
+    * Type “shasum -a 1 filepath” into terminal to output the SHA1 Checksum</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: You can drag the file into the terminal window to automatically input the path.* 
+    * Copy the outputted SHA1 Checksum into the Text Editor Mac application
+    * Copy the official/given Checksum into the Text Editor
+    * Press *command + F*
+    * Paste the official/given Checksum into the search bar and click enter
+    * Both SHA1 Checksums should match</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: The same process can be performed using the “MD5 filepath” terminal command.* 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+3. **Install/Boot into Arch Linux via VM**
+    * Enter the VM library with the *^ + command + L* keys
+    * Select “new” and drag the iso file into the VM window
+    * Choose “other Linux 5.x kernel 64-bit” for the operating system</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: the kernel release number can be found under the “release info” section on the downloads page.*
+    * Choose UEFI – The installation image uses systemd-boot for UEFI
+    * Click “customize settings” to change RAM allocation – I used 2048MB
+    * Press the start button
+    * Select Arch Linux Installation Medium and hit enter</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: After following these steps, the screen should contain an empty command line. The default keyboard layout is US.*  
 
-```markdown
-Syntax highlighted code block
+4. **Verify the boot method**
+    * ls /sys/firmware/efi/efivars <- If this command does not work/throws error, the system may have booted into BIOS mode. 
 
-# Header 1
-## Header 2
-### Header 3
+5. **Update the system clock**
+    * Enter the “timedatectl set-ntp true” command
+    * Check that the time was successfully updated with the “timedatectl status” command. Make sure that NTP = active 
 
-- Bulleted
-- List
+6. **Partition the disks**</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: cfdisk command can be used to create the partition tables <- This is a graphical version of fdisk that is MUCH more &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user-friendly.*
+    * Type “fdisk -l” to identify the block disks. *Rom, loop, or airoot can be ignored*.
+    * Type “fdisk /dev/sda” to enter the edit mode
+    * Type n to create a new partition (redo for each)
+      * Click enter for default partition number
+      * Click enter (leave blank) for default first sector
+      * Type “+ size” for the second sector (ex. “+260M”)
+        * EFI system partition -> at least 260 MiB
+        * Linux swap -> more than 512 MiB
+        * Linux root (x86-64) -> remainder 
+    * Type t to change partition type
+      * Enter the partition number
+      * Enter alias (1 = EFI System, 19 = Linux Swap, 23 = Linux root (x86-64)
+    * Type w to write changes
+    * Type “fdisk -l /dev/sda” to double-check partitions were successfully created
+    
+7. **Format the partitions**
+    * EFI System <- “mkfs.vfat /dev/efi_system_partition” (/dev/sda1)
+    * Linux Swap <- “mkswap /dev/swap_partition” (/dev/sda2)
+    * Linux root (x86-64) <- “mkfs.ext4 /dev/root_partition” (/dev/sda3)
 
-1. Numbered
-2. List
+8. **Mount the filesystems**
+    * Type “mount /dev/root_partition /mnt” to mount the root partition
+    * Type “mkdir /boot/EFI”
+    * Type “mount /dev/efi_system_partition /boot/EFI” to mount the EFI partition</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: DO NOT mount to /mnt/EFI because the later instructions will not work correctly. If this causes problems – CAN  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOUNT LATER.*  
+    * Type “swapon /dev/swap_partition” to enable swap
 
-**Bold** and _Italic_ and `Code` text
+### Linux Installation - Essential Packages/Text Editor
 
-[Link](url) and ![Image](src)
-```
+1. **Select the mirrors (w/ reflector)**
+    * Type “pacman -Sy reflector” to install the reflector package
+    * Type “reflector –verbose -l 200 -p http –sort rate –save /etc/pacman.d/mirrorlist
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+2. **Install essential packages**
+    * Type “pacstrap /mnt base linux linux-firmware”
+    * Type "pacman -S nano" to install the nano text editor
 
-### Jekyll Themes
+### Configure 
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/StevenGillenwater/archlinuxinstall/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+1. **Fstab**
+    * Type “genfstab -U  /mnt >> /mnt/etc/fstab”</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: Check the resulting /mnt/etc/fstab file, and edit it in case of errors.*
 
-### Support or Contact
+2. **Change root into the new system**
+    * Type “arch-chroot /mnt”
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+3. **Adjust the time zone**
+    * Type “ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime” to change the time zone
+    * Check that this was successful with the Date command
+
+4. **Localization**
+    * Type “pacman -S nano"
+    * Type “nano /etc/locale.gen” and uncomment en_US.UTF-8 UTF-8
+    * Type “locale-gen”
+    * Type “echo LANG=en_US.UTF-8 > /etc/locale.conf” to create/set the locale.conf file. 
+
+5. **Network configuration**
+    * Type “echo hostname > /etc/hostname” 
+
+6. **Root password**
+    * Type “passwd”… and then enter desired password 
+
+7. **Install bootloader**
+    * Type “pacman -S grub”
+    * Type “pacman -S efibootmgr dosfstools os-prober mtools”
+    * Type “mkdir /boot/EFI”
+    * Type “mount /dev/sda1 /boot/EFI”
+    * Type “grub-install --target=x86_64-efi --bootloader-id=grub_uefi –recheck” 
+    * Type “grub-mkconfig -o /boot/grub/grub.cfg”
+
+8. **Install networking manager**
+    * Type “pacman -S dhcpcd.”
+    * Type “systemctl enable dhcpcd.service”</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: if this service is not working, type “dhcpcd” to start.*
+
+9. **Reboot**
+    * Type exit command to leave chroot environment
+    * Type *shutdown now* to shutdown
+    * Go to VM library settings and remove boot disc – and restart linux VM
+
+### Post-Installation Guide
+
+1. **Install sudo/edit file**
+    * Type “pacman -S sudo” to install sudo capabilities
+    * Enable sudo powers for members of the wheel group:
+      * Type “EDITOR=nano visudo” to edit the sudoers file with nano
+      * Uncomment the “%wheel ALL=(ALL) ALL” line
+
+2. **Add users/give sudo powers**
+    * Type “useradd -m name” to create a new user
+    * Type “passwd name” to add a password for each created user</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: Can type “passwd -e name” to create expiring password*</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: Can check password expiration date by typing “sudo chage -l name”*
+    * Type “usermod -aG wheel name” to add users to the sudo-group
+    
+3. **Create/install DE (gnome) <- Did not like Budgie or LXDE**
+    * Type “pacman -S xorg gnome gnome-extra gdm”  <- use defaults
+    * Type “systemctl enable gdm” to enable the display manager
+    * Type *reboot*
+
+4. **Install another shell (zsh)**
+    * Type “pacman -S fish” to install the zsh package
+    * Type zsh to run the new user install setup</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: can be manually started with “autoload -Uz zsh-newuser-install zsh-newuser-install -f”*
+    * Type “chsh -s shell path” to change the default user shell
+    
+5. **Install OpenSSH**
+    * Type “pacman -Sy openssh”
+    * Log-in to the student gateway 
+      * ssh -p53997 slg0444@129.244.245.21
+      * ssh -p53997 user@192.168.2.48
+
+6. **Change color of the terminal output (bash)**
+    * Type “sudo cp /etc/bash.bashrc /etc/bash.bashrc.backup” to back up the bashrc file (to avoid issues)
+    * Type “sudo nano /etc/bash.bashrc” to edit the bashrc file</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: Editing this file edits the color schedule for all users!*
+    * Type `"\[\e[30m\][\[\e[m\]\[\e[1;34m\]\u\[\e[m\]\[\e[1;33m\]@\[\e[m\]\[\e[34m\]\h\[\e[m\]:\[\e[1;33m\]\w\[\e[m\]\[\e[30m\]]\[\e[m\]\[\e[1;33m\]\\$\[\e[m\]"` to change the bash prompt to TU colors</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: If the colors don’t change for all users, update each of the home .bashrc files.*
+
+7. **Add aliases**
+    * Use the cd command to enter home folder
+    * Type “nano .bashrc” to edit the bashrc file
+    * Add alias with the following syntax “alias name=’command’” Example: alias c=’clear’
+    * Reboot the system to see the changes</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: Editing the /etc/bash.bashrc file will add aliases for all users.*
+
+
+
+
+
+
+
