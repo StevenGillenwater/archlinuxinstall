@@ -6,24 +6,24 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: if the iso has split into two files, it has not downloaded correctly. The MD5/SHA1 will not match.*</br>
 
 2. **To verify the signature:**
-    * Type “shasum -a 1 filepath” into terminal to output the SHA1 Checksum</br>
+    * Type “shasum -a 1 filepath” into terminal to output the SHA1 Checksum </br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: You can drag the file into the terminal window to automatically input the path.* 
     * Copy the outputted SHA1 Checksum into the Text Editor Mac application
     * Copy the official/given Checksum into the Text Editor
     * Press *command + F*
     * Paste the official/given Checksum into the search bar and click enter
-    * Both SHA1 Checksums should match</br>
+    * Both SHA1 Checksums should match </br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: The same process can be performed using the “MD5 filepath” terminal command.* 
 
 3. **Install/Boot into Arch Linux via VM**
     * Enter the VM library with the *^ + command + L* keys
     * Select “new” and drag the iso file into the VM window
-    * Choose “other Linux 5.x kernel 64-bit” for the operating system</br>
+    * Choose “other Linux 5.x kernel 64-bit” for the operating system </br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: the kernel release number can be found under the “release info” section on the downloads page.*
     * Choose UEFI – The installation image uses systemd-boot for UEFI
     * Click “customize settings” to change RAM allocation – I used 2048MB
     * Press the start button
-    * Select Arch Linux Installation Medium and hit enter</br>
+    * Select Arch Linux Installation Medium and hit enter </br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: After following these steps, the screen should contain an empty command line. The default keyboard layout is US.*  
 
 4. **Verify the boot method**
@@ -58,7 +58,7 @@
 8. **Mount the filesystems**
     * Type “mount /dev/root_partition /mnt” to mount the root partition
     * Type “mkdir /boot/EFI”
-    * Type “mount /dev/efi_system_partition /boot/EFI” to mount the EFI partition</br>
+    * Type “mount /dev/efi_system_partition /boot/EFI” to mount the EFI partition </br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: DO NOT mount to /mnt/EFI because the later instructions will not work correctly. If this causes problems – CAN  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOUNT LATER.*  
     * Type “swapon /dev/swap_partition” to enable swap
 
@@ -107,7 +107,7 @@
 
 8. **Install networking manager**
     * Type “pacman -S dhcpcd.”
-    * Type “systemctl enable dhcpcd.service”</br>
+    * Type “systemctl enable dhcpcd.service” </br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: if this service is not working, type “dhcpcd” to start.*
 
 9. **Reboot**
