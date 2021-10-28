@@ -2,11 +2,11 @@
 
 ### Linux Pre-Installation
 
-1. **Download an HTTP link from https://archlinux.org/download/** </br>
+1. **Download an HTTP link from https://archlinux.org/download/**</br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: if the iso has split into two files, it has not downloaded correctly. The MD5/SHA1 will not match.*</br>
 
 2. **To verify the signature:**
-    * Type “shasum -a 1 filepath” into terminal to output the SHA1 Checksum </br>
+    * Type “shasum -a 1 filepath” into terminal to output the SHA1 Checksum</br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: You can drag the file into the terminal window to automatically input the path.* 
     * Copy the outputted SHA1 Checksum into the Text Editor Mac application
     * Copy the official/given Checksum into the Text Editor
@@ -18,12 +18,12 @@
 3. **Install/Boot into Arch Linux via VM**
     * Enter the VM library with the *^ + command + L* keys
     * Select “new” and drag the iso file into the VM window
-    * Choose “other Linux 5.x kernel 64-bit” for the operating system </br>
+    * Choose “other Linux 5.x kernel 64-bit” for the operating system</br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: the kernel release number can be found under the “release info” section on the downloads page.*
     * Choose UEFI – The installation image uses systemd-boot for UEFI
     * Click “customize settings” to change RAM allocation – I used 2048MB
     * Press the start button
-    * Select Arch Linux Installation Medium and hit enter </br>
+    * Select Arch Linux Installation Medium and hit enter</br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: After following these steps, the screen should contain an empty command line. The default keyboard layout is US.*  
 
 4. **Verify the boot method**
@@ -107,7 +107,7 @@
 
 8. **Install networking manager**
     * Type “pacman -S dhcpcd.”
-    * Type “systemctl enable dhcpcd.service” </br>
+    * Type “systemctl enable dhcpcd.service"</br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: if this service is not working, type “dhcpcd” to start.*
 
 9. **Reboot**
@@ -144,8 +144,8 @@
 5. **Install OpenSSH**
     * Type “pacman -Sy openssh”
     * Log-in to the student gateway 
-      * ssh -p53997 slg0444@129.244.245.21
-      * ssh -p53997 user@192.168.2.48
+      * ssh -p53997 username@129.244.245.21
+      * ssh -p53997 username@192.168.2.XX
 
 6. **Change color of the terminal output (bash)**
     * Type “sudo cp /etc/bash.bashrc /etc/bash.bashrc.backup” to back up the bashrc file (to avoid issues)
