@@ -3,7 +3,7 @@
 ### Linux Pre-Installation
 
 1. **Download an HTTP link from https://archlinux.org/download/** \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: if the iso has split into two files, it has not downloaded correctly. The MD5/SHA1 will not match.*</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: if the iso has split into two files, it has not downloaded correctly. The MD5/SHA1 will not match.* \
 
 2. **To verify the signature:**
     * Type “shasum -a 1 filepath” into terminal to output the SHA1 Checksum \
