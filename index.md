@@ -2,28 +2,28 @@
 
 ### Linux Pre-Installation
 
-1. **Download an HTTP link from https://archlinux.org/download/**</br>
+1. **Download an HTTP link from https://archlinux.org/download/** \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: if the iso has split into two files, it has not downloaded correctly. The MD5/SHA1 will not match.*</br>
 
 2. **To verify the signature:**
-    * Type “shasum -a 1 filepath” into terminal to output the SHA1 Checksum</br>
+    * Type “shasum -a 1 filepath” into terminal to output the SHA1 Checksum \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: You can drag the file into the terminal window to automatically input the path.* 
     * Copy the outputted SHA1 Checksum into the Text Editor Mac application
     * Copy the official/given Checksum into the Text Editor
     * Press *command + F*
     * Paste the official/given Checksum into the search bar and click enter
-    * Both SHA1 Checksums should match </br>
+    * Both SHA1 Checksums should match \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: The same process can be performed using the “MD5 filepath” terminal command.* 
 
 3. **Install/Boot into Arch Linux via VM**
     * Enter the VM library with the *^ + command + L* keys
     * Select “new” and drag the iso file into the VM window
-    * Choose “other Linux 5.x kernel 64-bit” for the operating system</br>
+    * Choose “other Linux 5.x kernel 64-bit” for the operating system \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: the kernel release number can be found under the “release info” section on the downloads page.*
     * Choose UEFI – The installation image uses systemd-boot for UEFI
     * Click “customize settings” to change RAM allocation – I used 2048MB
     * Press the start button
-    * Select Arch Linux Installation Medium and hit enter</br>
+    * Select Arch Linux Installation Medium and hit enter \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: After following these steps, the screen should contain an empty command line. The default keyboard layout is US.*  
 
 4. **Verify the boot method**
@@ -33,7 +33,7 @@
     * Enter the “timedatectl set-ntp true” command
     * Check that the time was successfully updated with the “timedatectl status” command. Make sure that NTP = active 
 
-6. **Partition the disks**</br>
+6. **Partition the disks** \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: cfdisk command can be used to create the partition tables <- This is a graphical version of fdisk that is MUCH more &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;user-friendly.*
     * Type “fdisk -l” to identify the block disks. *Rom, loop, or airoot can be ignored*.
     * Type “fdisk /dev/sda” to enter the edit mode
@@ -58,7 +58,7 @@
 8. **Mount the filesystems**
     * Type “mount /dev/root_partition /mnt” to mount the root partition
     * Type “mkdir /boot/EFI”
-    * Type “mount /dev/efi_system_partition /boot/EFI” to mount the EFI partition </br>
+    * Type “mount /dev/efi_system_partition /boot/EFI” to mount the EFI partition \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: DO NOT mount to /mnt/EFI because the later instructions will not work correctly. If this causes problems – CAN  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MOUNT LATER.*  
     * Type “swapon /dev/swap_partition” to enable swap
 
@@ -75,7 +75,7 @@
 ### Configure 
 
 1. **Fstab**
-    * Type “genfstab -U  /mnt >> /mnt/etc/fstab”</br>
+    * Type “genfstab -U  /mnt >> /mnt/etc/fstab” \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: Check the resulting /mnt/etc/fstab file, and edit it in case of errors.*
 
 2. **Change root into the new system**
@@ -107,7 +107,7 @@
 
 8. **Install networking manager**
     * Type “pacman -S dhcpcd.”
-    * Type “systemctl enable dhcpcd.service"</br>
+    * Type “systemctl enable dhcpcd.service" \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: if this service is not working, type “dhcpcd” to start.*
 
 9. **Reboot**
@@ -125,8 +125,8 @@
 
 2. **Add users/give sudo powers**
     * Type “useradd -m name” to create a new user
-    * Type “passwd name” to add a password for each created user</br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: Can type “passwd -e name” to create expiring password*</br>
+    * Type “passwd name” to add a password for each created user \
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: Can type “passwd -e name” to create expiring password* \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: Can check password expiration date by typing “sudo chage -l name”*
     * Type “usermod -aG wheel name” to add users to the sudo-group
     
@@ -137,7 +137,7 @@
 
 4. **Install another shell (zsh)**
     * Type “pacman -S fish” to install the zsh package
-    * Type zsh to run the new user install setup</br>
+    * Type zsh to run the new user install setup \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: can be manually started with “autoload -Uz zsh-newuser-install zsh-newuser-install -f”*
     * Type “chsh -s shell path” to change the default user shell
     
@@ -149,16 +149,16 @@
 
 6. **Change color of the terminal output (bash)**
     * Type “sudo cp /etc/bash.bashrc /etc/bash.bashrc.backup” to back up the bashrc file (to avoid issues)
-    * Type “sudo nano /etc/bash.bashrc” to edit the bashrc file</br>
+    * Type “sudo nano /etc/bash.bashrc” to edit the bashrc file \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: Editing this file edits the color schedule for all users!*
-    * Type `"\[\e[30m\][\[\e[m\]\[\e[1;34m\]\u\[\e[m\]\[\e[1;33m\]@\[\e[m\]\[\e[34m\]\h\[\e[m\]:\[\e[1;33m\]\w\[\e[m\]\[\e[30m\]]\[\e[m\]\[\e[1;33m\]\\$\[\e[m\]"` to change the bash prompt to TU colors</br>
+    * Type `"\[\e[30m\][\[\e[m\]\[\e[1;34m\]\u\[\e[m\]\[\e[1;33m\]@\[\e[m\]\[\e[34m\]\h\[\e[m\]:\[\e[1;33m\]\w\[\e[m\]\[\e[30m\]]\[\e[m\]\[\e[1;33m\]\\$\[\e[m\]"` to change the bash prompt to TU colors \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: If the colors don’t change for all users, update each of the home .bashrc files.*
 
 7. **Add aliases**
     * Use the cd command to enter home folder
     * Type “nano .bashrc” to edit the bashrc file
     * Add alias with the following syntax “alias name=’command’” Example: alias c=’clear’
-    * Reboot the system to see the changes</br>
+    * Reboot the system to see the changes \
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Note: Editing the /etc/bash.bashrc file will add aliases for all users.*
 
 
